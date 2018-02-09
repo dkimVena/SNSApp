@@ -122,9 +122,9 @@ export default class Authentication extends Component {
 
     return (
       <div className="container auth">
-        <Link className="logo" to="/">MEMOPAD</Link>
+        <Link className="logo" to="/">SNS APP</Link>
         <div className="card">
-          <div className="header blue white-text center">
+          <div className="header white-text center">
             <div className="card-content">{this.props.mode ? "LOGIN" : "REGISTER"}</div>
           </div>
           {this.props.mode ? loginView : registerView }

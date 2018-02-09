@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Write, MemoList } from 'components';
 import { connect } from 'react-redux';
-import { memoPostRequest, memoListRequest, memoEditPostRequest, memoDeletePostRequest, memoStarRequest } from 'actions/memo';
+import * as actions from 'actions';
 
 class Home extends Component {
 
@@ -14,6 +14,7 @@ class Home extends Component {
       this.loadOldMemo = this.loadOldMemo.bind(this);
       this.handleRemove = this.handleRemove.bind(this);
       this.handleStar = this.handleStar.bind(this);
+      this.handleComment = this.handleComment.bind(this);
       this.state = {
         loadingState: false,
         initiallyLoaded: false
@@ -168,6 +169,42 @@ class Home extends Component {
       );
     }
 
+    /* SAVE COMMENT */
+    handleComment(contents, memoId, index) {
+      return this.props.commentPostRequest(contents, memoId, index).then(
+        () => {
+          if(this.props.commentStatus.status === "SUCCESS") {
+            // TRIGGER LOAD NEW MEMO
+            // TO BE IMPLEMENTED
+            Materialize.toast('Success!', 2000);
+          } else {
+            /*
+                ERROR CODES
+                    1: NOT LOGGED IN
+                    2: EMPTY CONTENTS
+            */
+            let $toastContent;
+            switch(this.props.commentStatus.error) {
+              case 1:
+                // IF NOT LOGGED IN, NOTIFY AND REFRESH AFTER
+                $toastContent = $('<span style="color: #FFB4BA">You are not logged in</span>');
+                Materialize.toast($toastContent, 2000);
+                setTimeout(()=> {location.reload(false);}, 2000);
+                break;
+              case 2:
+                $toastContent = $('<span style="color: #FFB4BA">Please write something</span>');
+                Materialize.toast($toastContent, 2000);
+                break;
+              default:
+                $toastContent = $('<span style="color: #FFB4BA">Something Broke</span>');
+                Materialize.toast($toastContent, 2000);
+                break;
+            }
+          }
+        }
+      );
+    }
+
     /* POST EDITMEMO */
     handleEditPost(id, index, contents) {
       return this.props.memoEditPostRequest(id, index, contents).then(
@@ -270,10 +307,10 @@ class Home extends Component {
             Materialize.toast($toastContent, 2000);
 
 
-            // IF NOT LOGGED IN, REFRESH THE PAGE
-            if(this.props.starStatus.error === 2) {
-              setTimeout(()=> {location.reload(false)}, 2000);
-            }
+            // // IF NOT LOGGED IN, REFRESH THE PAGE
+            // if(this.props.starStatus.error === 2) {
+            //   setTimeout(()=> {location.reload(false)}, 2000);
+            // }
           }
         }
       )
@@ -291,7 +328,7 @@ class Home extends Component {
       const wallHeader = (
         <div>
           <div className="container wall-info">
-            <div className="card wall-info blue lighten-2 white-text">
+            <div className="card wall-info white-text">
               <div className="card-content">
                 {this.props.username}
               </div>
@@ -309,7 +346,8 @@ class Home extends Component {
                 currentUser={this.props.currentUser}
                 onEdit={this.handleEditPost}
                 onRemove={this.handleRemove}
-                onStar={this.handleStar}/>
+                onStar={this.handleStar}
+                onComment={this.handleComment}/>
           </div>
       );
     }
@@ -319,6 +357,7 @@ const mapStateToProps = (state) => {
   return {
     isLoggedIn: state.authentication.status.isLoggedIn,
     postStatus: state.memo.post,
+    commentStatus: state.memo.comment,
     currentUser: state.authentication.status.currentUser,
     memoData: state.memo.list.data,
     listStatus: state.memo.list.status,
@@ -329,4 +368,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { memoPostRequest, memoListRequest, memoEditPostRequest, memoDeletePostRequest, memoStarRequest })(Home);
+export default connect(mapStateToProps, actions)(Home);

@@ -42,6 +42,12 @@ export default class Header extends Component {
               </ul>
               <div className="right">
                 <ul>
+                  <li className="notification">
+                    <Link to="">
+                      <i className="material-icons">notifications</i>
+                      <span className="notification-badge">N</span>
+                    </Link>
+                  </li>
                   { this.props.isLoggedIn ? logoutButton : loginButton }
                 </ul>
               </div>

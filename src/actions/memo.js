@@ -1,20 +1,4 @@
-import {
-  MEMO_POST,
-  MEMO_POST_SUCCESS,
-  MEMO_POST_FAILURE,
-  MEMO_LIST,
-  MEMO_LIST_SUCCESS,
-  MEMO_LIST_FAILURE,
-  MEMO_EDIT_POST,
-  MEMO_EDIT_POST_SUCCESS,
-  MEMO_EDIT_POST_FAILURE,
-  MEMO_REMOVE,
-  MEMO_REMOVE_SUCCESS,
-  MEMO_REMOVE_FAILURE,
-  MEMO_STAR,
-  MEMO_STAR_SUCCESS,
-  MEMO_STAR_FAILURE
-} from './ActionTypes';
+import * as actions from './ActionTypes';
 import axios from 'axios';
 
 /* MEMO POST */
@@ -34,19 +18,61 @@ export function memoPostRequest(contents) {
 
 export function memoPost() {
     return {
-        type: MEMO_POST
+        type: actions.MEMO_POST
     };
 }
 
 export function memoPostSuccess() {
     return {
-        type: MEMO_POST_SUCCESS
+        type: actions.MEMO_POST_SUCCESS
     };
 }
 
 export function memoPostFailure(error) {
     return {
-        type: MEMO_POST_FAILURE,
+        type: actions.MEMO_POST_FAILURE,
+        error
+    };
+}
+
+/* COMMENT POST */
+export function commentPostRequest(contents, memoId, index) {
+
+  const data = {
+    contents,
+    memoId
+  };
+
+  return (dispatch) => {
+    // Inform Login API is starting
+    dispatch(commentPost());
+    // API request
+    return axios.post('/api/comment', data)
+      .then((response) => {
+        dispatch(commentPostSuccess(response.data, index));
+      }).catch((error) => {
+        dispatch(commentPostFailure(error));
+      });
+  }
+}
+
+export function commentPost() {
+    return {
+        type: actions.COMMENT_POST
+    };
+}
+
+export function commentPostSuccess(data, index) {
+    return {
+        type: actions.COMMENT_POST_SUCCESS,
+        index,
+        data
+    };
+}
+
+export function commentPostFailure(error) {
+    return {
+        type: actions.COMMENT_POST_FAILURE,
         error
     };
 }
@@ -85,13 +111,13 @@ export function memoListRequest(isInitial, listType, id, username) {
 
 export function memoList() {
     return {
-        type: MEMO_LIST
+        type: actions.MEMO_LIST
     };
 }
 
 export function memoListSuccess(data, isInitial, listType) {
     return {
-        type: MEMO_LIST_SUCCESS,
+        type: actions.MEMO_LIST_SUCCESS,
         data,
         isInitial,
         listType
@@ -100,7 +126,7 @@ export function memoListSuccess(data, isInitial, listType) {
 
 export function memoListFailure() {
     return {
-        type: MEMO_LIST_FAILURE
+        type: actions.MEMO_LIST_FAILURE
     };
 }
 
@@ -121,13 +147,13 @@ export function memoEditPostRequest(id, index, contents) {
 
 export function memoEditPost() {
     return {
-        type: MEMO_EDIT_POST
+        type: actions.MEMO_EDIT_POST
     };
 }
 
 export function memoEditPostSuccess(index, memo) {
     return {
-        type: MEMO_EDIT_POST_SUCCESS,
+        type: actions.MEMO_EDIT_POST_SUCCESS,
         index,
         memo
     };
@@ -135,7 +161,7 @@ export function memoEditPostSuccess(index, memo) {
 
 export function memoEditPostFailure(error) {
     return {
-        type: MEMO_EDIT_POST_FAILURE,
+        type: actions.MEMO_EDIT_POST_FAILURE,
         error
     };
 }
@@ -157,20 +183,20 @@ export function memoDeletePostRequest(id, index) {
 
 export function memoDeletePost() {
     return {
-        type: MEMO_REMOVE
+        type: actions.MEMO_REMOVE
     };
 }
 
 export function memoDeletePostSuccess(index) {
     return {
-        type: MEMO_REMOVE_SUCCESS,
+        type: actions.MEMO_REMOVE_SUCCESS,
         index,
     };
 }
 
 export function memoDeletePostFailure(error) {
     return {
-        type: MEMO_REMOVE_FAILURE,
+        type: actions.MEMO_REMOVE_FAILURE,
         error
     };
 }
@@ -190,13 +216,13 @@ export function memoStarRequest(id, index) {
 
 export function memoStar() {
   return {
-    type: MEMO_STAR
+    type: actions.MEMO_STAR
   };
 }
 
 export function memoStarSuccess(index, memo) {
   return {
-    type: MEMO_STAR_SUCCESS,
+    type: actions.MEMO_STAR_SUCCESS,
     index,
     memo
   };
@@ -204,7 +230,7 @@ export function memoStarSuccess(index, memo) {
 
 export function memoStarFailure(error) {
   return{
-    type: MEMO_STAR_FAILURE,
+    type: actions.MEMO_STAR_FAILURE,
     error
   };
 }

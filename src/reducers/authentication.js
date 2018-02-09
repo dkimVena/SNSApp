@@ -58,7 +58,7 @@ export default function authentication(state = initialState, action) {
       return update(state, {
         register: {
           status: { $set: 'FAILURE' },
-          error: { $set: actions.error }
+          error: { $set: action.error }
         }
       });
     /* GET STATUS */

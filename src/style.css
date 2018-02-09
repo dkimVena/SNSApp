@@ -31,6 +31,10 @@ a {
     margin: 0 auto;
 }
 
+.card .header .card-content {
+    background-color: #2d3e4f;
+}
+
 
 @media screen and (max-width: 480px) {
   .auth .card {
@@ -71,6 +75,32 @@ a {
     }
 }
 
+@-webkit-keyframes comment-leave {
+    0% {
+      opacity: 1;
+      max-height: 1080px;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+        max-height: 0px;
+    }
+}
+
+@keyframes comment-leave {
+    0% {
+      opacity: 1;
+      max-height: 1080px;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+        max-height: 0px;
+    }
+}
+
 .memo-leave {
     max-height: 0px;
     opacity: 0;
@@ -78,6 +108,15 @@ a {
     animation-duration: 1s;
     -webkit-animation-name: memo-leave;
     animation-name: memo-leave;
+}
+
+.comment-leave {
+  max-height: 0px;
+  opacity: 0;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-name: comment-leave;
+  animation-name: comment-leave;
 }
 
 @-webkit-keyframes memo-enter {
@@ -98,7 +137,7 @@ a {
     }
 }
 
-.memo-enter {
+.memo-enter, .comment-enter {
     -webkit-animation-duration: 2s;
     animation-duration: 2s;
     -webkit-animation-name: memo-enter;
@@ -119,6 +158,7 @@ a {
 
 .auth .btn {
     width: 90%;
+    background-color: #57687b;
 }
 
 .auth .footer {
@@ -206,9 +246,28 @@ body {
     top: 11px;
 }
 
+.comment {
+  position: relative;
+  left: 40px;
+  top: 11px;
+}
+
+.comment-write {
+  padding: 15px;
+}
+
 .star-count {
     position: relative;
     left: 20px;
+    top: 4px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #777;
+}
+
+.comment-count {
+    position: relative;
+    left: 45px;
     top: 4px;
     font-size: 13px;
     font-weight: bold;
@@ -224,6 +283,10 @@ body {
 .wall-info {
     font-size: 30px;
     text-align: center;
+}
+
+.wall-info .card-content {
+  background-color: #57687b;
 }
 
 /* SEARCH */
@@ -272,7 +335,29 @@ ul.search-results {
     background-color: rgba(255, 255, 255, 0.10);
 }
 
-/* NAV NAV WRAPPER */
+/* NAV */
 nav .nav-wrapper {
-  background-color: #2c3e50;
+    background-color: #2c3e50;
+}
+
+.notification {
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
+    position: relative;
+}
+
+.notification-badge {
+    left: 4px;
+    top: 4px;
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
+    background-color: #F44336;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 10px;
+    line-height: normal;
+    padding: 1px 3px;
+    position: absolute;
 }

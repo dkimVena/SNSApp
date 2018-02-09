@@ -6,6 +6,12 @@ const Memo = new Schema({
     writer: String,
     contents: String,
     starred: [String],
+    comments: [{
+      author: String,
+      content: String,
+      date: { type: Date, default: Date.now },
+      deleted: { type: Boolean, default: false }
+    }],
     date: {
         created: { type: Date, default: Date.now },
         edited: { type: Date, default: Date.now }

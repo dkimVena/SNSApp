@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import TimeAgo from 'react-timeago';
 import { Link } from 'react-router-dom';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import Comment from './Comment';
 
 class Memo extends Component {
 
@@ -8,12 +10,14 @@ class Memo extends Component {
     super(props);
     this.state = {
       editMode: false,
+      commentMode: false,
       contents: props.data.contents
     };
     this.toggleEdit = this.toggleEdit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
     this.handleStar = this.handleStar.bind(this);
+    this.handleComment = this.handleComment.bind(this);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -30,6 +34,37 @@ class Memo extends Component {
     let update = JSON.stringify(current) !== JSON.stringify(next);
     return update;
   }
+
+  componentDidUpdate() {
+      // WHEN COMPONENT UPDATES, INITIALIZE DROPDOWN
+      // (TRIGGERED WHEN LOGGED IN)
+      $('#dropdown-button-'+this.props.data._id).dropdown({
+          inDuration: 300,
+          outDuration: 225,
+          constrain_width: false, // Does not change width of dropdown to that of the activator
+          hover: false, // Activate on hover
+          gutter: 0, // Spacing from edge
+          belowOrigin: true, // Displays dropdown below the button
+          alignment: 'left' // Displays dropdown with edge aligned to the left of button
+      });
+
+    }
+
+    componentDidMount() {
+      // WHEN COMPONENT MOUNTS, INITIALIZE DROPDOWN
+      // (TRIGGERED WHEN REFRESHED)
+      $('#dropdown-button-'+this.props.data._id).dropdown({
+          inDuration: 300,
+          outDuration: 225,
+          constrain_width: false, // Does not change width of dropdown to that of the activator
+          hover: false, // Activate on hover
+          gutter: 0, // Spacing from edge
+          belowOrigin: true, // Displays dropdown below the button
+          alignment: 'left' // Displays dropdown with edge aligned to the left of button
+      });
+
+    }
+
   toggleEdit() {
     if(this.state.editMode) {
       let id = this.props.data._id;
@@ -68,6 +103,14 @@ class Memo extends Component {
     this.props.onStar(id, index);
   }
 
+  handleComment() {
+    let id = this.props.data._id;
+    let index = this.props.index;
+    this.setState({
+      commentMode: !this.state.commentMode
+    });
+  }
+
   render() {
     let starStyle = (this.props.data.starred.indexOf(this.props.currentUser) > -1) ? { color: '#ff9980' } : {} ;
     const { data, ownership } = this.props;
@@ -87,6 +130,19 @@ class Memo extends Component {
       </div>
     );
 
+    const commentView = (
+      <div>
+        <ul className="comment-list-items collection">
+          { data.comments.map( (comment, i) => {
+              return (
+                  <li key={comment._id} className="collection-item dismissable"><div>{comment.content}<Link to={`/wall/${comment.author}`} className="secondary-content">{comment.author}</Link></div></li>
+              );
+            })
+          }
+        </ul>
+        <Comment onComment={this.props.onComment} memoId={data._id} index={this.props.index}/>
+      </div>
+    );
     const memoView = (
       <div className="card">
         <div className="info">
@@ -98,10 +154,21 @@ class Memo extends Component {
           {data.contents}
         </div>
         <div className="footer">
-          <i className="material-icons log-footer-icon star icon-button"
-              style={starStyle}
-              onClick={this.handleStar}>star</i>
-          <span className="star-count">{data.starred.length}</span>
+            <i className="material-icons log-footer-icon star icon-button"
+                style={starStyle}
+                onClick={this.handleStar}>favorite</i>
+            <span className="star-count">{data.starred.length}</span>
+
+            <i className="material-icons log-footer-icon comment icon-button"
+                onClick={this.handleComment}>sms</i>
+            <span className="comment-count">{data.comments.length}</span>
+        </div>
+        <div className="comment-list">
+          <ReactCSSTransitionGroup transitionName="comment"
+                                transitionEnterTimeout={2000}
+                                transitionLeaveTimeout={1000}>
+            { this.state.commentMode ? commentView : '' }
+          </ReactCSSTransitionGroup>
         </div>
       </div>
     );
@@ -132,22 +199,6 @@ class Memo extends Component {
           { this.state.editMode ? editView : memoView }
         </div>
     );
-  }
-
-  componentDidUpdate() {
-    // WHEN COMPONENT UPDATES, INITIALIZE DROPDOWN
-    // (TRIGGERED WHEN LOGGED IN)
-    $('#dropdown-button-'+this.props.data._id).dropdown({
-        belowOrigin: true // Displays dropdown below the button
-    });
-  }
-
-  componentDidMount() {
-    // WHEN COMPONENT MOUNTS, INITIALIZE DROPDOWN
-    // (TRIGGERED WHEN REFRESHED)
-    $('#dropdown-button-'+this.props.data._id).dropdown({
-        belowOrigin: true // Displays dropdown below the button
-    });
   }
 }
 

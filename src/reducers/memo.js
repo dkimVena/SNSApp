@@ -22,6 +22,10 @@ const initialState = {
   star: {
     status: 'INIT',
     error: -1
+  },
+  comment: {
+    status: 'INIT',
+    error: -1
   }
 };
 
@@ -153,6 +157,28 @@ export default function memo(state = initialState, action) {
     case types.MEMO_STAR_FAILURE:
       return update(state, {
         star: {
+          status: { $set: 'FAILURE'},
+          error: { $set: action.error }
+        }
+      });
+    case types.COMMENT_POST_SUCCESS:
+      return update(state, {
+        comment: {
+          status: { $set: 'SUCCESS'}
+        },
+        list: {
+          data: { [action.index]: { $set: action.data } }
+        }
+      });
+    case types.COMMENT_POST:
+      return update(state, {
+        comment: {
+          status: { $set: 'WAITING'}
+        }
+      });
+    case types.COMMENT_POST_FAILURE:
+      return update(state, {
+        comment: {
           status: { $set: 'FAILURE'},
           error: { $set: action.error }
         }
