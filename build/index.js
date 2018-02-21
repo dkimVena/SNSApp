@@ -1,5 +1,9 @@
 'use strict';
 
+var _webpackDevServer = require('webpack-dev-server');
+
+var _webpackDevServer2 = _interopRequireDefault(_webpackDevServer);
+
 var _webpack = require('webpack');
 
 var _webpack2 = _interopRequireDefault(_webpack);
@@ -35,7 +39,6 @@ var _routes2 = _interopRequireDefault(_routes);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // HTTP REQUEST LOGGER
-// import WebpackDevServer from 'webpack-dev-server';
 var keys = require('../config/keys.js'); // PARSE HTML BODY
 
 var app = (0, _express2.default)();
@@ -79,14 +82,12 @@ app.listen(port, function () {
     console.log('Express is listening on port', port);
 });
 
-// if(process.env.NODE_ENV == 'development') {
-//     console.log('Server is running on development mode');
-//     const config = require('../webpack.dev.config');
-//     const compiler = webpack(config);
-//     const devServer = new WebpackDevServer(compiler, config.devServer);
-//     devServer.listen(
-//         devPort, () => {
-//             console.log('webpack-dev-server is listening on port', devPort);
-//         }
-//     );
-// }
+if (process.env.NODE_ENV == 'development') {
+    console.log('Server is running on development mode');
+    var config = require('../webpack.dev.config');
+    var compiler = (0, _webpack2.default)(config);
+    var devServer = new _webpackDevServer2.default(compiler, config.devServer);
+    devServer.listen(devPort, function () {
+        console.log('webpack-dev-server is listening on port', devPort);
+    });
+}
