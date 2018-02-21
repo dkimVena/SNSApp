@@ -34,9 +34,9 @@ app.use('/', express.static(path.join(__dirname, './../public')));
 /* setup routers & static directory */
 app.use('/api', api);
 
-// app.get('*', (req, res) => {
-//     res.sendFile(path.resolve(__dirname, './../public/index.html'));
-// });
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, './../public/index.html'));
+});
 
 /* handle error */
 app.use(function(err, req, res, next) {
@@ -58,15 +58,4 @@ if(process.env.NODE_ENV == 'development') {
             console.log('webpack-dev-server is listening on port', devPort);
         }
     );
-} else if (process.env.NODE_ENV === 'production') {
-  // Express will serve up production asssets
-  // like our main.js file, or main.css file!!
-  app.use(express.static('client/build'));
-
-  // Express will serve up the index.html file
-  // if it doesnt' recognize the routes
-  const path = require('path');
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'src', 'build', 'index.html'));
-  });
 }

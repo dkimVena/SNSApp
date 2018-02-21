@@ -12,9 +12,9 @@ var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
 
-var _path2 = require('path');
+var _path = require('path');
 
-var _path3 = _interopRequireDefault(_path2);
+var _path2 = _interopRequireDefault(_path);
 
 var _morgan = require('morgan');
 
@@ -63,14 +63,14 @@ app.use((0, _expressSession2.default)({
     saveUninitialized: true
 }));
 
-app.use('/', _express2.default.static(_path3.default.join(__dirname, './../public')));
+app.use('/', _express2.default.static(_path2.default.join(__dirname, './../public')));
 
 /* setup routers & static directory */
 app.use('/api', _routes2.default);
 
-// app.get('*', (req, res) => {
-//     res.sendFile(path.resolve(__dirname, './../public/index.html'));
-// });
+app.get('*', function (req, res) {
+    res.sendFile(_path2.default.resolve(__dirname, './../public/index.html'));
+});
 
 /* handle error */
 app.use(function (err, req, res, next) {
@@ -89,16 +89,5 @@ if (process.env.NODE_ENV == 'development') {
     var devServer = new _webpackDevServer2.default(compiler, config.devServer);
     devServer.listen(devPort, function () {
         console.log('webpack-dev-server is listening on port', devPort);
-    });
-} else if (process.env.NODE_ENV === 'production') {
-    // Express will serve up production asssets
-    // like our main.js file, or main.css file!!
-    app.use(_express2.default.static('client/build'));
-
-    // Express will serve up the index.html file
-    // if it doesnt' recognize the routes
-    var _path = require('path');
-    app.get('*', function (req, res) {
-        res.sendFile(_path.resolve(__dirname, 'src', 'build', 'index.html'));
     });
 }
