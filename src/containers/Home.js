@@ -33,7 +33,7 @@ class Home extends Component {
 
       const loadUntilScrollable = () => {
         // IF THE SCROLLBAR DOES NOT EXIST,
-        if($("body").height() < $(window).height()) {
+        if($("body").height() < $(window).height() - 200) {
           this.loadOldMemo().then(
             () => {
               // DO THIS RECURSIVELY UNLESS IT'S LAST PAGE
@@ -153,7 +153,6 @@ class Home extends Component {
                 // IF NOT LOGGED IN, NOTIFY AND REFRESH AFTER
                 $toastContent = $('<span style="color: #FFB4BA">You are not logged in</span>');
                 Materialize.toast($toastContent, 2000);
-                setTimeout(()=> {location.reload(false);}, 2000);
                 break;
               case 2:
                 $toastContent = $('<span style="color: #FFB4BA">Please write something</span>');
@@ -184,12 +183,12 @@ class Home extends Component {
                     2: EMPTY CONTENTS
             */
             let $toastContent;
-            switch(this.props.commentStatus.error) {
+            console.log(this.props.commentStatus);
+            switch(this.props.commentStatus.error.response.data.code) {
               case 1:
                 // IF NOT LOGGED IN, NOTIFY AND REFRESH AFTER
                 $toastContent = $('<span style="color: #FFB4BA">You are not logged in</span>');
                 Materialize.toast($toastContent, 2000);
-                setTimeout(()=> {location.reload(false);}, 2000);
                 break;
               case 2:
                 $toastContent = $('<span style="color: #FFB4BA">Please write something</span>');
