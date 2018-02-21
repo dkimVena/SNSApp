@@ -12,9 +12,9 @@ var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
 
-var _path = require('path');
+var _path2 = require('path');
 
-var _path2 = _interopRequireDefault(_path);
+var _path3 = _interopRequireDefault(_path2);
 
 var _morgan = require('morgan');
 
@@ -42,7 +42,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var keys = require('../config/keys.js'); // PARSE HTML BODY
 
 var app = (0, _express2.default)();
-var port = 3000;
+var port = process.env.PORT || 3000;
 var devPort = 4000;
 
 app.use((0, _morgan2.default)('dev'));
@@ -63,13 +63,13 @@ app.use((0, _expressSession2.default)({
     saveUninitialized: true
 }));
 
-app.use('/', _express2.default.static(_path2.default.join(__dirname, './../public')));
+app.use('/', _express2.default.static(_path3.default.join(__dirname, './../public')));
 
 /* setup routers & static directory */
 app.use('/api', _routes2.default);
 
 app.get('*', function (req, res) {
-    res.sendFile(_path2.default.resolve(__dirname, './../public/index.html'));
+    res.sendFile(_path3.default.resolve(__dirname, './../public/index.html'));
 });
 
 /* handle error */
@@ -77,6 +77,19 @@ app.use(function (err, req, res, next) {
     console.error(err.stack);
     res.status(500).send('Something broke!');
 });
+
+if (process.env.NODE_ENV === 'production') {
+    // Express will serve up production asssets
+    // like our main.js file, or main.css file!!
+    app.use(_express2.default.static('client/build'));
+
+    // Express will serve up the index.html file
+    // if it doesnt' recognize the routes
+    var _path = require('path');
+    app.get('*', function (req, res) {
+        res.sendFile(_path.resolve(__dirname, 'client', 'build', 'index.html'));
+    });
+}
 
 app.listen(port, function () {
     console.log('Express is listening on port', port);

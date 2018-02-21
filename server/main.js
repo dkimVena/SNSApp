@@ -10,7 +10,7 @@ import api from './routes';
 
 const keys = require('../config/keys.js');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const devPort = 4000;
 
 app.use(morgan('dev'));
@@ -43,6 +43,19 @@ app.use(function(err, req, res, next) {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
+
+if (process.env.NODE_ENV === 'production') {
+  // Express will serve up production asssets
+  // like our main.js file, or main.css file!!
+  app.use(express.static('client/build'));
+
+  // Express will serve up the index.html file
+  // if it doesnt' recognize the routes
+  const path = require('path');
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 app.listen(port, () => {
     console.log('Express is listening on port', port);
