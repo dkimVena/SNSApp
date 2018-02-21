@@ -1,11 +1,7 @@
 {
-  "name": "codelab",
+  "name": "dailyboard",
   "version": "1.0.0",
   "main": "index.js",
-  "engines": {
-    "node": "8.6.0",
-    "npm": "5.6.0"
-  },
   "scripts": {
     "clean": "rm -rf build public/bundle.js",
     "build": "babel server --out-dir build --presets=es2015 && webpack",
