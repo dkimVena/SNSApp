@@ -68,9 +68,9 @@ app.use('/', _express2.default.static(_path3.default.join(__dirname, './../publi
 /* setup routers & static directory */
 app.use('/api', _routes2.default);
 
-app.get('*', function (req, res) {
-    res.sendFile(_path3.default.resolve(__dirname, './../public/index.html'));
-});
+// app.get('*', (req, res) => {
+//     res.sendFile(path.resolve(__dirname, './../public/index.html'));
+// });
 
 /* handle error */
 app.use(function (err, req, res, next) {
@@ -99,6 +99,6 @@ if (process.env.NODE_ENV == 'development') {
     // if it doesnt' recognize the routes
     var _path = require('path');
     app.get('*', function (req, res) {
-        res.sendFile(_path.resolve(__dirname, 'client', 'build', 'index.html'));
+        res.sendFile(_path.resolve(__dirname, 'src', 'build', 'index.html'));
     });
 }
