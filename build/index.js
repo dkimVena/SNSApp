@@ -1,9 +1,5 @@
 'use strict';
 
-var _webpack = require('webpack');
-
-var _webpack2 = _interopRequireDefault(_webpack);
-
 var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
@@ -35,8 +31,9 @@ var _routes2 = _interopRequireDefault(_routes);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // HTTP REQUEST LOGGER
-// import WebpackDevServer from 'webpack-dev-server';
 var keys = require('../config/keys.js'); // PARSE HTML BODY
+// import WebpackDevServer from 'webpack-dev-server';
+// import webpack from 'webpack';
 
 var app = (0, _express2.default)();
 var port = process.env.PORT || 3000;
