@@ -183,7 +183,6 @@ class Home extends Component {
                     2: EMPTY CONTENTS
             */
             let $toastContent;
-            console.log(this.props.commentStatus);
             switch(this.props.commentStatus.error.response.data.code) {
               case 1:
                 // IF NOT LOGGED IN, NOTIFY AND REFRESH AFTER

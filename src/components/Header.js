@@ -36,7 +36,7 @@ export default class Header extends Component {
         <div>
           <nav>
             <div className="nav-wrapper">
-              <Link to="/" className="brand-logo center">MEMOPAD</Link>
+              <Link to="/" className="brand-logo center">DAILY BOARD</Link>
               <ul>
                 <li><a onClick={this.toggleSearch}><i className="material-icons">search</i></a></li>
               </ul>
