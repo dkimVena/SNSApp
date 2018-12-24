@@ -17,6 +17,8 @@ const Memo = new Schema({
         edited: { type: Date, default: Date.now }
     },
     is_edited: { type: Boolean, default: false }
-});
+}, {
+    usePushEach: true,
+ });
 
 export default mongoose.model('memo', Memo);
